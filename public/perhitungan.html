@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perhitungan</title>
+    <!-- Tautan ke Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <style>
+      .container {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav
+      class="navbar navbar-expand-lg navbar-dark custom-navbar"
+      style="background-color: black"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="/">Home</a>
+      </div>
+    </nav>
+
+    <div id="alertContent"></div>
+    <div class="container mt-3">
+      <div class="row">
+        <!-- Kolom untuk form input -->
+        <div class="col-md-4">
+          <form id="addDataForm">
+            <div class="form-group">
+              <label for="namaInput">Jenis Usaha:</label>
+              <select class="form-control" id="namaInput">
+                <option value="Usaha Otomotif">Usaha Otomotif</option>
+                <option value="Usaha Kuliner">Usaha Kuliner</option>
+                <option value="Usaha Fashion">Usaha Fashion</option>
+                <option value="Usaha Agribisnis">Usaha Agribisnis</option>
+                <option value="Usaha Kecantikan">Usaha Kecantikan</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="modalInput">Modal:</label>
+              <select class="form-control" id="modalInput">
+                <option value="1000000">1 Juta</option>
+                <option value="2000000">2 Juta</option>
+                <option value="3000000">3 Juta</option>
+                <option value="4000000">4 Juta</option>
+                <option value="5000000">5 Juta</option>
+                <option value="6000000">6 Juta</option>
+                <option value="7000000">7 Juta</option>
+                <option value="8000000">8 Juta</option>
+                <option value="9000000">9 Juta</option>
+                <option value="10000000">10 Juta</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="permintaanPasarInput">Permintaan Pasar:</label>
+              <select class="form-control" id="permintaanPasarInput">
+                <option value="banyak">Banyak</option>
+                <option value="sedang">Sedang</option>
+                <option value="sedikit">Sedikit</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="persainganInput">Persaingan:</label>
+              <select class="form-control" id="persainganInput">
+                <option value="tidak ada">Tidak Ada</option>
+                <option value="ada">Ada</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="trenInput">Tren:</label>
+              <select class="form-control" id="trenInput">
+                <option value="sangat tren">Sangat Tren</option>
+                <option value="sedang tren">Sedang Tren</option>
+                <option value="tidak tren">Tidak Tren</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="lokasiInput">Lokasi:</label>
+              <select class="form-control" id="lokasiInput">
+                <option value="depan minimarket">Depan Minimarket</option>
+                <option value="dekat sekolah">Dekat Sekolah</option>
+                <option value="dekat area kantor">Dekat Area Perkantoran</option>
+                <option value="dekat stasiun">Dekat Stasiun</option>
+                <option value="dekan kampus">dekat kampus</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="kepuasanInput">Kepuasan:</label>
+              <select class="form-control" id="kepuasanInput">
+                <option value="sangat puas">Sangat Puas</option>
+                <option value="puas">Puas</option>
+                <option value="tidak puas">Tidak Puas</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="peluangInput">Peluang:</label>
+              <select class="form-control" id="peluangInput">
+                <option value="berpeluang">Berpeluang</option>
+                <option value="tidak berpeluang">Tidak Berpeluang</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" id="hitungButton">
+              Hitung
+            </button>
+          </form>
+        </div>
+        <!-- Kolom untuk menampilkan hasil perhitungan -->
+        <div class="col-md-8">
+          <button type="button" class="btn btn-primary" id="ambilDataButton">
+            Ambil Hasil Perhitungan
+          </button>
+          <!-- Card untuk menampilkan data -->
+          <div class="card mt-3">
+            <div class="card-body">
+              <h5 class="card-title">Data Usaha</h5>
+              <div id="latestDataContent"></div>
+              <div id="tableContent"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skrip JavaScript -->
+    <script>
+      var namaInput = document.getElementById("namaInput");
+      var modalInput = document.getElementById("modalInput");
+      var permintaanPasarInput = document.getElementById(
+        "permintaanPasarInput"
+      );
+      var persainganInput = document.getElementById("persainganInput");
+      var trenInput = document.getElementById("trenInput");
+      var lokasiInput = document.getElementById("lokasiInput");
+      var kepuasanInput = document.getElementById("kepuasanInput");
+      var peluangInput = document.getElementById("peluangInput");
+      var addDataForm = document.getElementById("addDataForm");
+      var ambilDataButton = document.getElementById("ambilDataButton");
+
+      // Tangani klik tombol "Hitung"
+      addDataForm.addEventListener("submit", function (event) {
+        event.preventDefault(); // Hindari pengiriman formulir
+
+        // Ambil nilai dari input
+        var nama = namaInput.value;
+        var modal = modalInput.value;
+        var permintaanPasar = permintaanPasarInput.value;
+        var persaingan = persainganInput.value;
+        var tren = trenInput.value;
+        var lokasi = lokasiInput.value;
+        var kepuasan = kepuasanInput.value;
+        var peluang = peluangInput.value;
+
+        // Pastikan semua nilai telah diisi
+        if (
+          nama &&
+          modal &&
+          permintaanPasar &&
+          persaingan &&
+          tren &&
+          lokasi &&
+          kepuasan &&
+          peluang
+        ) {
+          // Buat objek data yang akan dikirim
+          var data = {
+            nama: nama,
+            modal: modal,
+            permintaanPasar: permintaanPasar,
+            persaingan: persaingan,
+            tren: tren,
+            lokasi: lokasi,
+            kepuasan: kepuasan,
+            peluang: peluang,
+          };
+
+          // Konversi objek data menjadi format JSON
+          var jsonData = JSON.stringify(data);
+
+          // Konfigurasi permintaan HTTP
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "http://localhost:4000/api/add");
+          xhr.setRequestHeader("Content-Type", "application/json");
+
+          // Tangani respon dari server
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              // Respon sukses
+              console.log("Data berhasil ditambahkan!");
+              // Kosongkan nilai input setelah sukses
+              namaInput.value = "";
+              modalInput.value = "";
+              permintaanPasarInput.value = "";
+              persainganInput.value = "";
+              trenInput.value = "";
+              lokasiInput.value = "";
+              kepuasanInput.value = "";
+              peluangInput.value = "";
+            } else {
+              // Respon gagal
+              console.error("Gagal menambahkan data:", xhr.statusText);
+            }
+          };
+
+          // Tangani kesalahan pada permintaan
+          xhr.onerror = function () {
+            console.error("Terjadi kesalahan pada permintaan.");
+          };
+
+          // Kirim permintaan dengan data JSON
+          xhr.send(jsonData);
+        } else {
+          // Tampilkan pesan kesalahan jika ada input yang kosong atau tidak valid
+          alert("Harap isi semua kolom dengan nilai yang valid!");
+        }
+      });
+
+      // Tangani klik tombol "Ambil Data"
+      document
+        .getElementById("ambilDataButton")
+        .addEventListener("click", function () {
+          // Kirim permintaan GET ke URL
+          fetch("http://localhost:4000/api/get")
+            .then((response) => response.json()) // Konversi respons ke JSON
+            .then((data) => {
+              // Simpan data di variabel global untuk digunakan kemudian
+              window.latestData = data[0]; // Asumsi bahwa data[0] adalah data terbaru
+              // Tampilkan alert dengan data terbaru jika ada
+              if (data.length > 0) {
+                var latestData = data[0];
+                tampilkanAlert(latestData);
+                tampilkanDataTerbaru(latestData);
+                // Hilangkan data pertama dari array untuk menampilkan sisanya dalam tabel
+                data.shift();
+              }
+              // Panggil fungsi untuk menampilkan data ke dalam tabel
+              tampilkanData(data);
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+
+      // Tangani klik tombol "Hitung"
+      document
+        .getElementById("hitungButton")
+        .addEventListener("click", function () {
+          // Pastikan data terbaru tersedia sebelum mencoba menampilkan alert
+          if (window.latestData) {
+            tampilkanAlert(window.latestData);
+          } else {
+            console.error("Data terbaru belum diambil.");
+          }
+        });
+
+      // Fungsi untuk menampilkan alert dengan data terbaru
+      function tampilkanAlert(data) {
+        var alertContent = document.getElementById("alertContent");
+        var html =
+          "<div class='alert alert-info alert-dismissible fade show' role='alert'>" +
+          "<strong>Data Terbaru!</strong>" +
+          "</div>";
+
+        // Tampilkan alert dalam konten alert
+        alertContent.innerHTML = html;
+      }
+
+      // Fungsi untuk menampilkan data terbaru dalam card di atas tabel
+      function tampilkanDataTerbaru(data) {
+        var cardContent = document.getElementById("latestDataContent");
+        var html =
+          "<div class='card mb-3' style='max-width: 540px;'>" +
+          "<div class='row g-0'>" +
+          "<div class='col-md-4'>" +
+          "</div>" +
+          "<div class='col-md-8'>" +
+          "<div class='card-body'>" +
+          "<h5 class='card-title'>Data Terbaru</h5>" +
+          "<p class='card-text'>Jenis Usaha: " +
+          data.nama +
+          "<br>Modal: " +
+          data.modal +
+          "<br>Total: " +
+          Math.round(data.total) +
+          "<br>Warning: " +
+          data.warning +
+          "</p>" +
+          "<p class='card-text'><small class='text-muted'>Last updated just now</small></p>" +
+          "</div>" +
+          "</div>" +
+          "</div>" +
+          "</div>";
+
+        // Tampilkan data terbaru dalam card
+        cardContent.innerHTML = html;
+      }
+
+      // Fungsi untuk menampilkan data ke dalam tabel
+      function tampilkanData(data) {
+        var tableContent = document.getElementById("tableContent");
+        var html =
+          "<table class='table table-responsive'><thead><tr><th>Nama Usaha</th><th>Modal</th><th>Permintaan Pasar</th><th>Persaingan</th><th>Tren</th><th>Lokasi</th><th>Kepuasan</th><th>Peluang</th><th>Total</th><th>Warning</th></tr></thead><tbody>";
+
+        // Loop melalui setiap entri dalam respons
+        data.forEach(function (usaha) {
+          html += "<tr>";
+          html += "<td>" + usaha.nama + "</td>";
+          html += "<td>" + usaha.modal + "</td>";
+          html += "<td>" + usaha.permintaanPasar + "</td>";
+          html += "<td>" + usaha.persaingan + "</td>";
+          html += "<td>" + usaha.tren + "</td>";
+          html += "<td>" + usaha.lokasi + "</td>";
+          html += "<td>" + usaha.kepuasan + "</td>";
+          html += "<td>" + usaha.peluang + "</td>";
+          html += "<td>" + usaha.total + "</td>";
+          html += "<td>" + usaha.warning + "</td>";
+          html += "</tr>";
+        });
+
+        html += "</tbody></table>";
+
+        // Tampilkan data dalam tabel
+        tableContent.innerHTML = html;
+      }
+    </script>
+  </body>
+</html>
